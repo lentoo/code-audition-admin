@@ -42,6 +42,18 @@ export default [
         icon: 'sprites'
       }
     ]
+  },
+  {
+    name: '分类管理',
+    path: '/category',
+    icon: 'category-manager',
+    children: [
+      {
+        name: '分类列表',
+        path: '/category/index',
+        icon: 'category-list'
+      }
+    ]
   }
 
 ]

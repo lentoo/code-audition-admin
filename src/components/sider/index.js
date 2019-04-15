@@ -58,13 +58,13 @@ export default {
     return (
       <div class="sider">
         <div class="sider-logo">
-          Vue
+          {!this.getMenuCollapse ? '码上面试后台管理系统' : ''}
         </div>
         <el-menu
           default-active={this.defaultActive}
-          class="el-menu-vertical-demo"
+          class="el-menu-vertical-demo sider-menu"
           background-color="#001529"
-          text-color="#fff"
+          text-color="hsla(0,0%,100%,.65)"
           active-text-color="#116BBE"
           router={true}
           collapse={this.getMenuCollapse}

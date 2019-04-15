@@ -1,6 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
+const requireContext = require.context('./modules', true, /\w+(.js)$/)
+let allModules = {}
+requireContext.keys().map(file => {
+  const obj = requireContext(file)
+  const reg = /\.\/(\w+).js/
+  const result = reg.exec(file)
+  if (result) {
+    allModules[result[1]] = obj
+  }
+})
 const types = {
   MENU_COLLAPSE: 'MENU_COLLAPSE',
   BREADCRUMB_ITEMS: 'BREADCRUMB_ITEMS'
@@ -33,5 +43,8 @@ export default new Vuex.Store({
     getBreadcrumbItems (state) {
       return state[types.BREADCRUMB_ITEMS]
     }
+  },
+  modules: {
+    ...allModules
   }
 })

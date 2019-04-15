@@ -1,0 +1,17 @@
+/*css reset*/
+html, body, div, applet, object, iframe, em, p, font, img, small, strong, center, dl, dt, dd, ol, ul, li, form, label, table, caption, tbody, tr, th, td {margin:0;padding:0;border:0;outline:0;vertical-align:baseline;}
+h1, h2, h3, h4, h5, h6, span{margin:0;padding:0;border:0;outline:0;vertical-align:baseline;}
+ol, ul {list-style:none} :focus {outline:none; }
+table {border-collapse:collapse;border-spacing: 0;}
+table a {color: #5193eb }
+caption, th, td { text-align: left; font-weight: normal;}
+strong {font-weight:600;}
+a{text-decoration:none;cursor:pointer;color: inherit;}
+a:hover{text-decoration:underline;}
+body{font-family:'Microsoft Yahei' }
+input[type=botton]{word-wrap:break-word; outline:none;vertical-align:middle;}
+input{border-radius:0;font-family:"Microsoft Yahei";}
+li{ list-style-type:none;}
+img { border: none;}
+i,em{font-style: normal;}
+.textarea{resize:none;}

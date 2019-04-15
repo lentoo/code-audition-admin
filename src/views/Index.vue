@@ -69,8 +69,8 @@ export default {
   .viewer {
     background: #FAFAFA;
     flex: 1;
-    overflow: auto;
-    overflow-x: hidden;
+    overflow: hidden;
+
     margin-top: 5px;
     position: relative;
     @include flex;

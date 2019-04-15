@@ -2,6 +2,8 @@ $logoH: 65px;
 .sider {
   min-height: 100vh;
   background: #001529;
+  position: relative;
+
   &-logo {
     height: $logoH;
     background: #022445;
@@ -9,6 +11,13 @@ $logoH: 65px;
     line-height: $logoH;
     text-align: center;
     font-size: 18px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    z-index: 11;
+  }
+  &-menu {
+    padding-top: $logoH;
   }
   .el-menu {
     border-right: 0;

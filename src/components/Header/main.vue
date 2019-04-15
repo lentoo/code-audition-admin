@@ -15,7 +15,29 @@
     </div>
 
     <div class="header-right">
-      <span>Lentoo</span>
+      <div class="icon-items">
+        <div class="icon-item">
+          <cc-svg-icon icon-class='notice'></cc-svg-icon>
+        </div>
+          <el-dropdown @visible-change="dropdownVivibleHandle">
+            <div class="icon-item" :class="{
+              opened: dropdownVivible
+            }">
+              <cc-svg-icon class-name='icon-avatar' icon-class='avatar'></cc-svg-icon>
+              <span>Lentoo</span>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>个人中心</el-dropdown-item>
+              <el-dropdown-item>个人设置</el-dropdown-item>
+              <el-dropdown-item divided>退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
+      </div>
+      <!-- <div class="icon-items">
+        <cc-svg-icon class-name='icon-avatar' icon-class='avatar'></cc-svg-icon>
+        <span>Lentoo</span>
+      </div> -->
     </div>
   </header>
 </template>
@@ -27,6 +49,11 @@ Vue.component(Breadcrumb.name, Breadcrumb)
 Vue.component(BreadcrumbItem.name, BreadcrumbItem)
 export default {
   name: 'Header',
+  data () {
+    return {
+      dropdownVivible: false
+    }
+  },
   computed: {
     ...mapGetters(['getMenuCollapse', 'getBreadcrumbItems'])
   },
@@ -34,12 +61,15 @@ export default {
     ...mapActions(['MENU_COLLAPSE']),
     handleMenuFold () {
       this.MENU_COLLAPSE(!this.getMenuCollapse)
+    },
+    dropdownVivibleHandle (visible) {
+      this.dropdownVivible = visible
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-@import '~styles/index.scss';
+@import '~styles/animation.scss';
 $headerHeight: 65px;
 .header {
   height: $headerHeight;
@@ -59,6 +89,23 @@ $headerHeight: 65px;
     height: 100%;
     overflow: hidden;
     color: rgba(0, 0, 0, .65);
+    @include flex(row);
+    align-items: center;
+    .icon-items {
+      margin-right: 10px;
+      height: 100%;
+      @include flex(row);
+      align-items: center;
+      .icon-item {
+        padding: 0 12px;
+        @include flex(row);
+        align-items: center;
+        cursor: pointer;
+        &.opened {
+          background: rgba(0,0,0,.025);
+        }
+      }
+    }
   }
   > div:first-child {
     padding: 0 10px;
@@ -78,6 +125,11 @@ $headerHeight: 65px;
   .fade-move-enter-to,.fade-move-leave {
     opacity: 1;
     transform: translateX(0);
+  }
+  .icon-avatar {
+    @include wh(30px, 30px);
+    margin-right: 10px;
+    vertical-align: middle !important;
   }
 }
 </style>
