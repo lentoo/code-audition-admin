@@ -56,3 +56,27 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.tc {
+  text-align: center;
+}
+.tl {
+  text-align: left;
+}
+.tr {
+  text-align: right;
+}
+.pointer {
+  cursor: pointer;
+}
+.bold {
+  font-weight: 700;
+}
+
+// element-ui 样式覆盖
+.el-date-table td.today {
+  background: transparent;
+}
+
+.theme {
+  color: $primary-color;
+}

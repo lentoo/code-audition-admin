@@ -32,11 +32,6 @@ export default [
     icon: 'optimization',
     children: [
       {
-        name: '图片自动压缩',
-        path: '/optimization/image-compression',
-        icon: 'compression'
-      },
-      {
         name: '自动合成精灵图',
         path: '/optimization/sprites',
         icon: 'sprites'

@@ -4,21 +4,39 @@
       <cc-svg-icon class-name="menu-fold" icon-class="menu-fold" @click="handleMenuFold"></cc-svg-icon>
     </div>
     <div>
-      <!-- <el-breadcrumb separator="/"> -->
-        <transition-group tag="el-breadcrumb" separator-class="el-icon-arrow-right" name="fade-move">
-          <el-breadcrumb-item v-for="item in getBreadcrumbItems" :key="item.path">{{item.name}}</el-breadcrumb-item>
-        </transition-group>
-        <!-- <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
-        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-        <el-breadcrumb-item>活动详情</el-breadcrumb-item> -->
-      <!-- </el-breadcrumb> -->
+      <transition-group tag="el-breadcrumb" separator-class="el-icon-arrow-right" name="fade-move">
+        <el-breadcrumb-item v-for="item in getBreadcrumbItems" :key="item.path">{{item.name}}</el-breadcrumb-item>
+      </transition-group>
     </div>
 
     <div class="header-right">
       <div class="icon-items">
-        <div class="icon-item">
-          <cc-svg-icon icon-class='notice'></cc-svg-icon>
-        </div>
+        <el-popover
+          placement="bottom-end"
+          v-model="noticeVisible"
+          popper-class="header-popper"
+        >
+          <el-tabs
+            :stretch="true"
+            v-model="activeName">
+            <el-tab-pane label="通知" name="notice">
+              <notice-list></notice-list>
+            </el-tab-pane>
+            <el-tab-pane label="消息" name="message">
+              <notice-list></notice-list>
+            </el-tab-pane>
+            <el-tab-pane label="待办" name="todos">
+              <notice-list></notice-list>
+            </el-tab-pane>
+          </el-tabs>
+          <div class="icon-item" :class="{
+            opened: noticeVisible
+          }" slot="reference">
+            <el-badge :value="12">
+              <cc-svg-icon icon-class='notice'></cc-svg-icon>
+            </el-badge>
+          </div>
+        </el-popover>
           <el-dropdown @visible-change="dropdownVivibleHandle">
             <div class="icon-item" :class="{
               opened: dropdownVivible
@@ -34,24 +52,42 @@
           </el-dropdown>
 
       </div>
-      <!-- <div class="icon-items">
-        <cc-svg-icon class-name='icon-avatar' icon-class='avatar'></cc-svg-icon>
-        <span>Lentoo</span>
-      </div> -->
     </div>
   </header>
 </template>
 <script>
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import { Breadcrumb, BreadcrumbItem } from 'element-ui'
+import { Breadcrumb, BreadcrumbItem, Badge } from 'element-ui'
+import NoticeList from '../notice-list'
 Vue.component(Breadcrumb.name, Breadcrumb)
 Vue.component(BreadcrumbItem.name, BreadcrumbItem)
+Vue.component(Badge.name, Badge)
 export default {
   name: 'Header',
+  components: {
+    NoticeList
+  },
   data () {
     return {
-      dropdownVivible: false
+      dropdownVivible: false,
+      noticeVisible: false,
+      activeName: 'notice',
+      dropdownList: [
+        {
+          name: '个人中心',
+          icon: 'person'
+        },
+        {
+          name: '个人设置',
+          icon: 'setting'
+        },
+        {
+          name: '退出登录',
+          divided: true,
+          icon: 'login-out'
+        }
+      ]
     }
   },
   computed: {
@@ -69,7 +105,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~styles/animation.scss';
 $headerHeight: 65px;
 .header {
   height: $headerHeight;

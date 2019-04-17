@@ -4,7 +4,7 @@ Vue.use(Vuex)
 const requireContext = require.context('./modules', true, /\w+(.js)$/)
 let allModules = {}
 requireContext.keys().map(file => {
-  const obj = requireContext(file)
+  const obj = requireContext(file).default
   const reg = /\.\/(\w+).js/
   const result = reg.exec(file)
   if (result) {

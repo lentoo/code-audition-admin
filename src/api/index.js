@@ -1,6 +1,7 @@
 import axios from 'axios'
 import router from '../router'
 import { Message, Loading } from 'element-ui'
+import { LocalStorage } from '../utils'
 const service = axios.create({
   // 设置超时时间
   timeout: 6000,
@@ -17,9 +18,9 @@ service.interceptors.request.use(config => {
   loading = Loading.service({
     text: '正在加载中......'
   })
-  const token = localStorage.getItem('token')
+  const token = LocalStorage.getItem('token')
   if (token) {
-    config.headers['Authorization'] = token
+    config.headers['header-key'] = '123456' // token
   }
   return config
 }, (error) => {
@@ -113,11 +114,11 @@ service.interceptors.response.use(response => {
 })
 
 export default service
-
+const uploadUrl = process.env.VUE_APP_BASE_URL
 export const uploadFile = formData => {
   const res = service.request({
     method: 'post',
-    url: '/upload',
+    url: uploadUrl,
     data: formData,
     headers: { 'Content-Type': 'multipart/form-data' }
   })

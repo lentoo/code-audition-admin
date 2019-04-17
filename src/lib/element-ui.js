@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Card, Button, Row, Col, Tag, Switch, Form, FormItem, Message, Input, Icon, Table, TableColumn, Dialog, Upload, Dropdown, DropdownMenu, DropdownItem } from 'element-ui'
+import { Card, Button, Row, Col, Tag, Switch, Form, FormItem, Message, Input, Icon, Table, TableColumn, Dialog, Upload, Dropdown, DropdownMenu, DropdownItem, Popover, Tabs, TabPane } from 'element-ui'
 
 Vue.component(Card.name, Card)
 Vue.component(Button.name, Button)
@@ -18,5 +18,7 @@ Vue.component(Upload.name, Upload)
 Vue.component(Dropdown.name, Dropdown)
 Vue.component(DropdownMenu.name, DropdownMenu)
 Vue.component(DropdownItem.name, DropdownItem)
-
+Vue.component(Popover.name, Popover)
+Vue.component(Tabs.name, Tabs)
+Vue.component(TabPane.name, TabPane)
 Vue.prototype.$message = Message

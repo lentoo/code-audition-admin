@@ -1,15 +1,16 @@
 <template>
-  <el-row>
+  <el-row
+    ref="tableWrapper"
+    :class="`cc-table-${_uid}`"
+  >
     <el-col
       class="cc-table-wrapper"
-      ref="wrapper"
       :span="24">
       <el-table
         v-on="$listeners"
         v-bind="$attrs"
         :height="autoHeight"
         :data="tableData"
-        ref="table"
       >
         <template
          v-for="(column, index) in tableColumns"
@@ -133,7 +134,7 @@ export default {
      * @description 表格最大高度 默认 65vh
      */
     maxHeight: {
-      default: '65vh'
+      default: ''
     }
   },
   data () {
@@ -150,15 +151,23 @@ export default {
   watch: {
     row (newRow, oldRow) {
       this.tableData = this.row
-      if (newRow.length < oldRow.length) {
-        if (newRow.length > 14) {
+      this.$nextTick(() => {
+        if (newRow.length === oldRow.length) {
+          return
+        }
+        let tableRowCount = 0
+        const rows = this.$el.querySelectorAll('.el-table__row')
+        if (rows.length > 0) {
+          tableRowCount = rows[0].clientHeight * rows.length
+        }
+        const rect = this.$refs.tableWrapper.$el.getBoundingClientRect()
+        console.log('tableRowCount', tableRowCount, rect.top, window.innerHeight)
+        if (tableRowCount + rect.top + 20 > window.innerHeight) {
           this.autoHeight = this.maxHeight
         } else {
           this.autoHeight = ''
         }
-      } else if (newRow.length > oldRow.length) {
-        this.autoHeight = this.maxHeight
-      }
+      })
     },
     columns () {
       this.tableColumns = this.columns
