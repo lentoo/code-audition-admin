@@ -40,6 +40,11 @@ service.interceptors.response.use(response => {
   // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
   // 否则的话抛出错误
   if (responseCode === 200) {
+    const code = response.data.code
+    if (code === -1) {
+      Message.error(response.data.msg)
+      return Promise.reject(response)
+    }
     return Promise.resolve(response.data)
   } else {
     return Promise.reject(response)
@@ -70,12 +75,13 @@ service.interceptors.response.use(response => {
     // 401：未登录
     case 401:
       // 跳转登录页
-      router.replace({
-        path: '/login',
-        query: {
-          redirect: router.currentRoute.fullPath
-        }
-      })
+      // router.replace({
+      //   path: '/login',
+      //   query: {
+      //     redirect: router.currentRoute.fullPath
+      //   }
+      // })
+      Message.error('401')
       break
     // 403: token过期
     case 403:

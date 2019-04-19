@@ -39,6 +39,18 @@ export default [
     ]
   },
   {
+    name: '题库管理',
+    path: '/question',
+    icon: 'question',
+    children: [
+      {
+        name: '题目列表',
+        path: '/question/review',
+        icon: 'question-review'
+      }
+    ]
+  },
+  {
     name: '分类管理',
     path: '/category',
     icon: 'category-manager',
@@ -47,6 +59,18 @@ export default [
         name: '分类列表',
         path: '/category/index',
         icon: 'category-list'
+      }
+    ]
+  },
+  {
+    name: '消息管理',
+    path: '/message',
+    icon: 'message-manager',
+    children: [
+      {
+        name: '反馈列表',
+        path: '/message/feedback',
+        icon: 'feedback'
       }
     ]
   }

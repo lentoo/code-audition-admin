@@ -9,5 +9,9 @@ module.exports = class CustomWebpackPlugin {
     compiler.plugin('done', function (stats) {
       console.log('done: ')
     })
+    compiler.plugin('emit', function (compilation, callback) {
+      console.log('emit: ')
+      callback()
+    })
   }
 }

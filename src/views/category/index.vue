@@ -28,6 +28,7 @@
         <cc-table
           :columns="columns"
           :row="list"
+          max-height="65vh"
           >
           <template slot="icon" slot-scope="{scope}">
             <img class="img" :src="scope.row.icon"/>
