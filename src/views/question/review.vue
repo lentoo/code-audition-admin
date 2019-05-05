@@ -3,7 +3,7 @@
     <el-card>
       <el-row>
         <el-col :span="3">
-          <el-select v-model="value" clearable>
+          <el-select v-model="status" clearable>
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -15,10 +15,15 @@
           </el-select>
         </el-col>
         <el-col class="ml10" :span="4">
-          <el-input placeholder="输入微信名称进行搜索"></el-input>
+          <el-input v-model="weName" placeholder="输入微信名称进行搜索"></el-input>
         </el-col>
         <el-col class="ml10" :span="2">
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click="search">搜索</el-button>
+        </el-col>
+      </el-row>
+      <el-row class="mt20">
+        <el-col>
+          <router-link to="/question/review/add" tag="el-button">新增</router-link>
         </el-col>
       </el-row>
       <el-row class="mt20">
@@ -26,7 +31,7 @@
           <cc-table
             :columns="columns"
             :row="list"
-            max-height="72vh"
+            max-height="65vh"
           >
 
             <template slot="sorts" slot-scope="{ scope }">
@@ -76,7 +81,10 @@
           <el-col><span class="w100 tr mr5">微信名称：</span>{{currentItem.userName}}</el-col>
           <el-col class="mt20"><span class="w100 tr mr5">审核状态：</span><el-tag size="small" :type="question.status | getTagType">{{question.status}}</el-tag></el-col>
           <el-col class="mt20" v-if="question.description"><span class="w100 tr mr5">描述：</span>{{question.description}}</el-col>
-          <el-col class="mt20"><span class="w100 tr mr5">答案：</span>{{question.answer}}</el-col>
+          <el-col class="mt20">
+            <span class="w100 tr mr5">答案：</span>
+            <div v-html="question.answer" class="inline"></div>
+          </el-col>
           <el-col class="mt20" v-if="['已通过', '已驳回'].includes(question.status)">
             <el-row>
               <el-col>
@@ -123,7 +131,8 @@ export default {
         value: 3000,
         label: '已驳回'
       }],
-      value: '',
+      status: '',
+      weName: '',
       list: [],
       currentItem: {},
       question: {},
@@ -186,10 +195,15 @@ export default {
   },
   methods: {
     ...mapActions([types.GET_QUESTION_LIST, types.AUDIT_QUESTION, types.QUESTION_DETAIL]),
+    search () {
+      this.loadData()
+    },
     async loadData () {
       await this.GET_QUESTION_LIST({
         limit: this.pagination.limit,
-        page: this.pagination.page
+        page: this.pagination.page,
+        auditStatus: this.status,
+        name: this.weName
       })
       this.list = Object.freeze(this.getQuestionList.data.data)
       this.$success(this.getQuestionList.data.page)

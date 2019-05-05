@@ -162,7 +162,7 @@ export default {
         }
         const rect = this.$refs.tableWrapper.$el.getBoundingClientRect()
         console.log('tableRowCount', tableRowCount, rect.top, window.innerHeight)
-        if (tableRowCount + rect.top + 20 > window.innerHeight) {
+        if (tableRowCount + rect.top + 100 > window.innerHeight) {
           this.autoHeight = this.maxHeight
         } else {
           this.autoHeight = ''

@@ -81,6 +81,9 @@ export default {
       box-sizing: border-box;
       width: 100%;
       position: absolute;
+      height: 100%;
+
+      // @include scrollbar();
     }
   }
   .fade-move-enter-active,.fade-move-leave-active {

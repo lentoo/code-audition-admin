@@ -15,9 +15,9 @@ service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencod
 let loading = null
 service.interceptors.request.use(config => {
   // 在请求先展示加载框
-  loading = Loading.service({
-    text: '正在加载中......'
-  })
+  // loading = Loading.service({
+  //   text: '正在加载中......'
+  // })
   const token = LocalStorage.getItem('token')
   if (token) {
     config.headers['header-key'] = '123456' // token
@@ -120,7 +120,7 @@ service.interceptors.response.use(response => {
 })
 
 export default service
-const uploadUrl = process.env.VUE_APP_BASE_URL
+const uploadUrl = process.env.VUE_APP_UPLOAD
 export const uploadFile = formData => {
   const res = service.request({
     method: 'post',

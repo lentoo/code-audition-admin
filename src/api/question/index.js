@@ -16,3 +16,9 @@ export const questionAudit = params => axios.put(`/audition/questionAudit/back/a
  * @param {*} params
  */
 export const questionDetail = params => axios.get(`/audition/questionAudit/back/${params.id}`)
+
+/**
+ * @description 投稿
+ * @param {*} params
+ */
+export const questionSubmit = params => axios.post(`/audition/questionAudit/back/submit`, qs.stringify(params))

@@ -34,7 +34,7 @@ routerContext.keys().forEach(route => {
   */
   IndexRoute.children = [...IndexRoute.children, ...(routerModule.default || routerModule)]
 })
-
+console.log('IndexRoute', IndexRoute)
 export default new Router({
   mode: 'hash',
   routes: routes
