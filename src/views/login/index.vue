@@ -39,8 +39,8 @@ import QRCode from 'qrcode'
 import { generatorClientId, LocalStorage } from '../../utils'
 
 const unicode = generatorClientId()
-
-const url = `ws://qenfy4.natappfree.cc/backLoginHandler/unicode=${unicode}`
+const wsUrl = process.env.VUE_APP_SOCKET_URL
+const url = `${wsUrl}/backLoginHandler/unicode=${unicode}`
 export default {
   name: 'cc-login',
 
@@ -123,7 +123,7 @@ export default {
             break
           case 1:
             // 确认登录
-            LocalStorage.setItem('token', e.data)
+            LocalStorage.setItem('token', data.data)
             this.$router.push('/category/index')
             break
           case 101:

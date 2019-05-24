@@ -5,7 +5,7 @@ const path = require('path')
 const IS_PROD = process.env.NODE_ENV === 'production'
 const cdnDomian = '/'
 module.exports = {
-  publicPath: IS_PROD ? cdnDomian : '/',
+  // publicPath: IS_PROD ? cdnDomian : '/',
   css: {
     loaderOptions: {
       sass: {
@@ -13,6 +13,9 @@ module.exports = {
         @import '~styles/mixin.scss';`
       }
     }
+  },
+  devServer: {
+    https: true
   },
   configureWebpack: () => ({
     devtool: 'source-map',

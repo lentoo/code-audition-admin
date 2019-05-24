@@ -6,16 +6,7 @@ export function generatorClientId (len = 32) {
 export class LocalStorage {
   static setItem (key, value) {
     if (typeof value === 'string') {
-      localStorage.setItem(key, JSON.stringify({
-        _format: 'string',
-        value
-      }))
-    }
-    if (typeof value === 'object') {
-      localStorage.setItem(key, JSON.stringify({
-        _format: 'object',
-        value
-      }))
+      localStorage.setItem(key, JSON.stringify(value))
     }
   }
   static getItem (key) {
@@ -24,7 +15,7 @@ export class LocalStorage {
       return null
     }
 
-    return JSON.parse(val).value
+    return JSON.parse(val)
   }
 }
 

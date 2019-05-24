@@ -20,7 +20,9 @@ service.interceptors.request.use(config => {
   // })
   const token = LocalStorage.getItem('token')
   if (token) {
-    config.headers['header-key'] = '123456' // token
+    console.log('token', token);
+    
+    config.headers['header-key'] = token
   }
   return config
 }, (error) => {
