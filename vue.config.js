@@ -1,5 +1,6 @@
 const CompressionPlugin = require('compression-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 const CustomWebpackPlugin = require('./plugins/custom-webpack-plugin')
 const path = require('path')
 const IS_PROD = process.env.NODE_ENV === 'production'
@@ -15,7 +16,7 @@ module.exports = {
     }
   },
   devServer: {
-    https: true
+    https: false
   },
   configureWebpack: () => ({
     devtool: 'source-map',
@@ -27,11 +28,14 @@ module.exports = {
   }),
   chainWebpack: config => {
     // #region svg-config
-    const svgRule = config.module.rule('svg') // 找到svg-loader
+    const rule = config.module.rule('svg')
+    rule.exclude.add(path.resolve('./src/assets/icons/svg'))
+    const svgRule = config.module.rule('auto-svg') // 找到svg-loader
     svgRule.uses.clear() // 清除已有的loader, 如果不这样做会添加在此loader之后
-    svgRule.exclude.add(/node_modules/) // 正则匹配排除node_modules目录
-    svgRule // 添加svg新的loader处理
-      .test(/\.svg$/)
+    svgRule
+      .test(/\.(svg)(\?.*)?$/)
+      .exclude.add(/node_modules/) // 正则匹配排除node_modules目录
+      .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
@@ -50,7 +54,8 @@ module.exports = {
         .rule('images')
         .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
         .use('img-loader')
-        .loader('img-loader').options({
+        .loader('img-loader')
+        .options({
           plugins: [
             require('imagemin-jpegtran')(),
             require('imagemin-pngquant')({
@@ -70,7 +75,7 @@ module.exports = {
           minRatio: 0.8,
           cache: true
         })
-        .tap(args => { })
+        .tap(args => {})
 
       // #endregion
 
@@ -102,11 +107,10 @@ module.exports = {
           '//unpkg.com/element-ui/lib/index.js'
         ]
       }
-      config.plugin('html')
-        .tap(args => {
-          args[0].cdn = cdn
-          return args
-        })
+      config.plugin('html').tap(args => {
+        args[0].cdn = cdn
+        return args
+      })
 
       // #endregion
 

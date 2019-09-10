@@ -7,9 +7,20 @@ import './components'
 import './assets/icons'
 import './lib/element-ui'
 import './assets/styles/reset.scss'
-
 Vue.config.productionTip = false
 
+// const io = socketio('http://127.0.0.1:7001/chat')
+// io.on('connect', () => {
+//   console.log('connect!')
+//   io.emit('chat', 'hello world!')
+// })
+// io.on('disconnect', () => {
+//   console.log('disconnect')
+// })
+
+// io.on('res', data => {
+//   console.log('res', data)
+// })
 Vue.mixin({
   methods: {
     /**

@@ -13,21 +13,34 @@
                 <div class="invalid" v-if="isExpire">
                   <p>二维码已失效</p>
                   <p>
-                    <el-button @click="refreshQrCode" type="primary" size="small">刷新</el-button>
+                    <el-button
+                      @click="refreshQrCode"
+                      type="primary"
+                      size="small"
+                      >刷新</el-button
+                    >
                   </p>
                 </div>
               </div>
-              <p style="padding: 10px 0;font-size: 12px;text-align: center;color: #999;">打开 <span style="color: #007fff;">码上面试</span> 扫一扫进行登录</p>
+              <p
+                style="padding: 10px 0;font-size: 12px;text-align: center;color: #999;"
+              >
+                打开
+                <span style="color: #007fff;">码上面试小程序</span>
+                扫一扫进行登录
+              </p>
             </div>
             <div class="scan-success-wrapper" v-show="isScanCodeSuccess">
-              <cc-svg-icon class="icon-scan-success" icon-class='icon-scan-success'></cc-svg-icon>
+              <cc-svg-icon
+                class="icon-scan-success"
+                icon-class="icon-scan-success"
+              ></cc-svg-icon>
               <p>扫描成功</p>
               <div class="scan-success-tips">
                 <span>请勿刷新本页面，按手机提示操作</span>
               </div>
             </div>
           </div>
-
         </el-card>
       </div>
     </div>
@@ -37,16 +50,18 @@
 <script>
 import QRCode from 'qrcode'
 import { generatorClientId, LocalStorage } from '../../utils'
-
+import socketio from 'socket.io-client'
 const unicode = generatorClientId()
 const wsUrl = process.env.VUE_APP_SOCKET_URL
-const url = `${wsUrl}/backLoginHandler/unicode=${unicode}`
+// const url = `${wsUrl}/backLoginHandler/unicode=${unicode}`
+
+const io = socketio(location.protocol + wsUrl)
 export default {
   name: 'cc-login',
 
   data () {
     return {
-      socket: new WebSocket(url),
+      // socket: new WebSocket(url),
       unicode,
       isScanCodeSuccess: false,
       isExpire: false,
@@ -56,8 +71,17 @@ export default {
     }
   },
   created () {
-    this.socket.onopen = this.websocketOnOpen
-    this.socket.onmessage = this.websocketOnMessage
+    // this.socket.onopen = this.websocketOnOpen
+    // this.socket.onmessage = this.websocketOnMessage
+
+    io.on('connect', () => {
+      console.log('connect')
+      this.sendRefreshQrCode()
+    })
+    io.on('message', message => {
+      console.log('beforeLogin', message)
+      this.websocketOnMessage(message)
+    })
   },
   mounted () {
     this.generateQrCode()
@@ -98,11 +122,18 @@ export default {
       this.sendRefreshQrCode()
     },
     sendRefreshQrCode () {
-      if (this.socket) {
-        this.socket.send(JSON.stringify({
-          // 101 表示刷新二维码
-          status: 101,
-          loginToken: this.loginToken
+      // if (this.socket) {
+      //   this.socket.send(JSON.stringify({
+      //     // 101 表示刷新二维码
+      //     status: 101,
+      //     loginToken: this.loginToken
+      //   }))
+      // }
+      if (io) {
+        io.emit('beforeLogin', JSON.stringify({
+          unicode: this.unicode,
+          loginToken: this.loginToken,
+          status: 101
         }))
       }
     },
@@ -115,7 +146,7 @@ export default {
     websocketOnMessage (e) {
       console.log('websocketOnMessage', e)
       try {
-        const data = JSON.parse(e.data)
+        const data = JSON.parse(e)
         switch (data.code) {
           case 1000:
             // 已被扫码
@@ -153,7 +184,7 @@ export default {
   }
   &-wrapper {
     height: 100vh;
-    background: url('../../assets/images/bg.jpg');
+    background: url("../../assets/images/bg.jpg");
     background-size: cover;
   }
   &-form {
@@ -169,7 +200,7 @@ export default {
     height: 100%;
     left: 0;
     top: 0;
-    background-color: rgba(0, 0, 0, .6);
+    background-color: rgba(0, 0, 0, 0.6);
     @include center(column);
     > p {
       color: #fff;
