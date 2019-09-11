@@ -14,11 +14,12 @@ let routes = [
   IndexRoute,
   {
     path: '/login',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/login/index.vue')
+    component: () =>
+      import(/* webpackChunkName: "login" */ '@/views/login/index.vue')
   },
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/category/index'
   }
 ]
 
@@ -30,11 +31,13 @@ routerContext.keys().forEach(route => {
   }
   const routerModule = routerContext(route)
   /**
-  * 兼容 import export 和 require module.export 两种规范
-  */
-  IndexRoute.children = [...IndexRoute.children, ...(routerModule.default || routerModule)]
+   * 兼容 import export 和 require module.export 两种规范
+   */
+  IndexRoute.children = [
+    ...IndexRoute.children,
+    ...(routerModule.default || routerModule)
+  ]
 })
-console.log('IndexRoute', IndexRoute)
 export default new Router({
   mode: 'hash',
   routes: routes

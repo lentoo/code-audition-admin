@@ -1,0 +1,30 @@
+query fetchSort ($name: String, $page: Float = 1, $limit: Float = 10) {
+  sorts (name: $name, page: $page, limit: $limit) {
+    page {
+      page
+      pages
+      limit
+      hasMore
+      total
+    }
+    items {
+      sortName
+      icon
+      _id
+      select
+      attentionNum
+      questionNum
+    }
+  }
+}
+
+mutation saveSort ($sort: SortProp!) {
+  saveSort(sort: $sort) {
+    sortName
+    icon
+  }
+}
+
+mutation removeSort ($id: String!) {
+  removeSort(id: $id)
+}

@@ -4,9 +4,10 @@
       <el-card class="category">
         <el-row class="mb20">
           <el-col :span="4">
-
-            <el-input v-model="content" placeholder="请输入分类名称搜索"></el-input>
-
+            <el-input
+              v-model="content"
+              placeholder="请输入分类名称搜索"
+            ></el-input>
           </el-col>
           <el-col :span="2" class="tc">
             <el-button type="primary" @click="search">
@@ -18,31 +19,41 @@
           <el-col>
             <el-row type="flex">
               <!-- <el-col :span="2"> -->
-              <el-button @click="dialogTitle = '添加分类' ;dialogFormVisible = true">
+              <el-button
+                @click="
+                  dialogTitle = '添加分类';
+                  dialogFormVisible = true;
+                "
+              >
                 添加分类
               </el-button>
               <!-- </el-col> -->
             </el-row>
           </el-col>
         </el-row>
-        <cc-table
-          :columns="columns"
-          :row="list"
-          max-height="65vh"
-          >
-          <template slot="icon" slot-scope="{scope}">
-            <img class="img" :src="scope.row.icon"/>
+        <cc-table :columns="columns" :row="list" max-height="65vh">
+          <template slot="icon" slot-scope="{ scope }">
+            <img class="img" :src="scope.row.icon" />
           </template>
-          <template slot="operate" slot-scope="{scope}">
-            <span class="pointer theme pl10" @click="updateItem(scope.row)">修改</span>
-            <el-popover
-              placement="top"
-              width="160"
-              v-model="scope.row.popover">
+          <template slot="operate" slot-scope="{ scope }">
+            <span class="pointer theme pl10" @click="updateItem(scope.row)"
+              >修改</span
+            >
+            <el-popover placement="top" width="160" v-model="scope.row.popover">
               <p>你确定要删除这条记录吗？</p>
               <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="scope.row.popover = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="handleDeleteClick(scope.row)">确定</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  @click="scope.row.popover = false"
+                  >取消</el-button
+                >
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="handleDeleteClick(scope.row)"
+                  >确定</el-button
+                >
               </div>
               <span slot="reference" class="pointer theme pl10">删除</span>
             </el-popover>
@@ -59,21 +70,37 @@
         ></cc-pagination>
       </el-card>
     </el-col>
-    <el-dialog :close-on-click-modal="false" :title="dialogTitle" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog
+      :close-on-click-modal="false"
+      :title="dialogTitle"
+      :visible.sync="dialogFormVisible"
+      width="650px"
+    >
       <el-form :model="form">
         <el-form-item label="分类名称：" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="分类图标：" :label-width="formLabelWidth">
           <div v-if="form.iconUrl" class="dialog-img">
-            <img :src="form.iconUrl" alt="" srcset="">
+            <img :src="form.iconUrl" alt="" srcset="" />
           </div>
-          <el-upload :action="uploadUrl" :on-success="handleUploadSuccess" :show-file-list="false">
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <el-upload
+            :action="uploadUrl"
+            :on-success="handleUploadSuccess"
+            :show-file-list="false"
+            drag
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">
+              将文件拖到此处，或<em>点击上传</em>
+            </div>
+            <!-- <el-button slot="trigger" size="small" type="primary"
+              >选取文件</el-button
+            > -->
           </el-upload>
         </el-form-item>
         <el-form-item label="" :label-width="formLabelWidth">
-          <img src="" alt="">
+          <img src="" alt="" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -88,6 +115,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import TableMixin from '../../mixins/table'
 import categoryTypes from '../../constant/types/category-types.js'
+import { fetchSorts, saveSorts, removeSortItem } from '../../api/category/index'
 export default {
   name: 'category',
   mixins: [TableMixin],
@@ -109,11 +137,11 @@ export default {
           label: '分类图标'
         },
         {
-          prop: 'questionCount',
+          prop: 'questionNum',
           label: '题目数'
         },
         {
-          prop: 'attentionFrequency',
+          prop: 'attentionNum',
           label: '关注人数'
         },
         {
@@ -146,13 +174,16 @@ export default {
       this.loadData()
     },
     async loadData () {
-      await this.GET_CATEGORIES({
+      const { page, items } = await fetchSorts({
         page: this.pagination.page,
         limit: this.pagination.limit,
-        sortName: this.content
+        name: this.content
       })
-      let list = this.getCategoriesList.data ? this.getCategoriesList.data.data : []
-      this.$success(this.getCategoriesList.data.page)
+      this.pagination.page = page.page
+      this.pagination.count = page.total
+
+      let list = items
+
       list = list.map(item => {
         this.$set(item, 'popover', false)
         return item
@@ -161,7 +192,7 @@ export default {
     },
     updateItem (item) {
       this.form = {
-        id: item.id,
+        id: item._id,
         name: item.sortName,
         iconUrl: item.icon
       }
@@ -169,13 +200,14 @@ export default {
       this.dialogTitle = '修改分类'
     },
     async handleDeleteClick (item) {
-      await this.DELETE_CATEGORY(item.id)
-      this.$tips({
-        result: this.getDeleteCategory
-      }).then(() => {
-        item.popover = false
-        this.loadData()
-      })
+      await removeSortItem({ id: item._id })
+      // await this.DELETE_CATEGORY(item.id)
+      item.popover = false
+      this.loadData()
+      // this.$tips({
+      //   result: this.getDeleteCategory
+      // }).then(() => {
+      // })
     },
     handleUploadSuccess (response, file, fileList) {
       this.form.iconUrl = response.code && response.data.url
@@ -189,28 +221,20 @@ export default {
         this.$message.error('请上传分类图标')
         return
       }
-      let result = null
-      if (this.form.id) {
-        await this.UPDATE_CATEGORY({
-          id: this.form.id,
-          sortName: this.form.name,
-          icon: this.form.iconUrl
-        })
-        result = this.getUpdateCategory
-      } else {
-        await this.ADD_CATEGORY({
-          sortName: this.form.name,
-          icon: this.form.iconUrl
-        })
-        result = this.getAddCategory
+      const sortVariables = {
+        sortName: this.form.name,
+        icon: this.form.iconUrl
       }
-
-      this.$tips({
-        result
-      }).then(() => {
-        this.dialogFormVisible = false
-        this.loadData()
+      if (this.form.id) {
+        sortVariables._id = this.form.id
+      }
+      await saveSorts({
+        sort: sortVariables
       })
+      this.loadData()
+
+      this.dialogFormVisible = false
+
       this.form = {}
     }
   }

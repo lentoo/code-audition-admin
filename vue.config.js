@@ -14,9 +14,6 @@ module.exports = {
       }
     }
   },
-  devServer: {
-    https: false
-  },
   configureWebpack: () => ({
     devtool: 'source-map',
     resolve: {
@@ -26,6 +23,13 @@ module.exports = {
     }
   }),
   chainWebpack: config => {
+    // GraphQL Loader
+    config.module
+      .rule('graphql')
+      .test(/\.(graphql|gql)$/)
+      .use('graphql-tag/loader')
+      .loader('graphql-tag/loader')
+      .end()
     // #region svg-config
     const rule = config.module.rule('svg')
     rule.exclude.add(path.resolve('./src/assets/icons/svg'))
