@@ -1,7 +1,6 @@
 const CompressionPlugin = require('compression-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
-const CustomWebpackPlugin = require('./plugins/custom-webpack-plugin')
 const path = require('path')
 const IS_PROD = process.env.NODE_ENV === 'production'
 const cdnDomian = '/'
@@ -47,7 +46,6 @@ module.exports = {
     imagesRule.exclude.add(path.resolve('src/assets/icons'))
 
     // #endregion svg-config
-    config.plugin('custom').use(CustomWebpackPlugin)
     if (process.env.NODE_ENV === 'production') {
       // #region 图片压缩
       config.module
@@ -57,7 +55,7 @@ module.exports = {
         .loader('img-loader')
         .options({
           plugins: [
-            require('imagemin-jpegtran')(),
+            // require('imagemin-jpegtran')(),
             require('imagemin-pngquant')({
               quality: [0.75, 0.85]
             })
