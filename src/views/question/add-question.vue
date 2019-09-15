@@ -81,8 +81,6 @@
 import Vue from 'vue'
 import { Select, Option } from 'element-ui'
 import CcMarkdown from '../../components/cc-markdown/index.js'
-import { mapGetters, mapActions } from 'vuex'
-import categoryTypes from '../../constant/types/category-types.js'
 import { addQuestionItem } from '../../api/question'
 import { fetchSorts } from '../../api/category'
 import { delay } from '../../utils'

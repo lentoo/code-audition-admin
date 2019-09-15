@@ -112,9 +112,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+
 import TableMixin from '../../mixins/table'
-import categoryTypes from '../../constant/types/category-types.js'
 import { fetchSorts, saveSorts, removeSortItem } from '../../api/category/index'
 export default {
   name: 'category',
