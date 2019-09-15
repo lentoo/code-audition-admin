@@ -160,7 +160,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getCategoriesList', 'getAddCategory', 'getUpdateCategory', 'getDeleteCategory']),
     uploadUrl () {
       return process.env.VUE_APP_UPLOAD
     }
@@ -169,7 +168,6 @@ export default {
     this.loadData()
   },
   methods: {
-    ...mapActions([categoryTypes.GET_CATEGORIES, categoryTypes.ADD_CATEGORY, categoryTypes.UPDATE_CATEGORY, categoryTypes.DELETE_CATEGORY]),
     search () {
       this.loadData()
     },
@@ -201,13 +199,8 @@ export default {
     },
     async handleDeleteClick (item) {
       await removeSortItem({ id: item._id })
-      // await this.DELETE_CATEGORY(item.id)
       item.popover = false
       this.loadData()
-      // this.$tips({
-      //   result: this.getDeleteCategory
-      // }).then(() => {
-      // })
     },
     handleUploadSuccess (response, file, fileList) {
       this.form.iconUrl = response.code && response.data.url

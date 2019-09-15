@@ -1,24 +1,53 @@
 import qs from 'qs'
 import axios from '../index'
-/**
- * @description 题目列表
- */
-export const questionList = params => axios.get(`/audition/questionAudit/back?${qs.stringify(params)}`)
+import client from '../../utils/graphql-client'
+import {
+  addQuestion,
+  updateQuestion,
+  removeQuestion,
+  questions,
+  question,
+  reviewQuestion
+} from './index.graphql'
+export const fetchQuestionList = (params, noCache = false) => {
+  const query = {
+    query: questions,
+    variables: params,
+    fetchPolicy: noCache ? 'network-only' : null
+  }
+  return client.query(query).then(({ data }) => data.fetchQuestionList)
+}
 
-/**
- * @description 审核题目
- * @param {*} params
- */
-export const questionAudit = params => axios.put(`/audition/questionAudit/back/audit/${params.id}`, qs.stringify(params))
+export const addQuestionItem = params =>
+  client
+    .mutate({
+      mutation: addQuestion,
+      variables: params
+    })
+    .then(({ data }) => data.addQuestion)
 
-/**
- * @description 题目详情
- * @param {*} params
- */
-export const questionDetail = params => axios.get(`/audition/questionAudit/back/${params.id}`)
+export const updateQuestionItem = params =>
+  client
+    .mutate({
+      mutation: updateQuestion,
+      variables: params
+    })
+    .then(({ data }) => data.updateQuestion)
 
-/**
- * @description 投稿
- * @param {*} params
- */
-export const questionSubmit = params => axios.post(`/audition/questionAudit/back/submit`, qs.stringify(params))
+export const removeQuestionItem = params =>
+  client
+    .mutate({
+      mutation: removeQuestion,
+      variables: params
+    })
+    .then(({ data }) => data.removeQuestion)
+
+export const fetchQuestionItem = params =>
+  client
+    .query({ query: question, variables: params, fetchPolicy: 'network-only' })
+    .then(({ data }) => data.fetchQuestion)
+
+export const reviewQuestionItem = params =>
+  client
+    .mutate({ mutation: reviewQuestion, variables: params })
+    .then(({ data }) => data.reviewQuestion)

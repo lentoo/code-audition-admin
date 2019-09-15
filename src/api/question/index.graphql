@@ -1,0 +1,73 @@
+# Write your query or mutation here
+
+mutation addQuestion ($data: QuestionProp!){
+  addQuestion(data: $data) {
+    code
+    msg
+  }
+}
+mutation updateQuestion ($data: QuestionProp!){
+  updateQuestion(data: $data) {
+    code
+    msg
+  }
+}
+mutation removeQuestion ($id: String!){
+  removeQuestion(id: $id) {
+    code
+    msg
+  }
+}
+mutation reviewQuestion ($id: String!, $reason: String!, $status: Float!) {
+  reviewQuestion (status: $status, id: $id, reason: $reason) {
+    code
+    msg
+  }
+}
+query questions ($page: Float = 1, $limit: Float = 20, $auditStatus: Float, $nickName: String) {
+  fetchQuestionList (page: $page, limit: $limit, auditStatus: $auditStatus, nickName: $nickName) {
+    page {
+      limit
+      total
+      hasMore
+      page
+      pages
+    }
+    items {
+      _id
+      title
+      descriptionOfhtml
+      descriptionOfmarkdown
+      auditStatus
+      answerOfhtml
+      answerOfmarkdown
+      createAtDate
+      userinfo {
+        _id
+        openId
+        nickName
+      }
+      sort {
+        sortName
+        _id
+      }    
+    }
+  }
+}
+query question ($id: String!) {
+  fetchQuestion (id: $id) {
+    _id
+    title
+    descriptionOfhtml
+    descriptionOfmarkdown
+    auditStatus
+    answerOfhtml
+    answerOfmarkdown
+    createAtDate
+    auditInfo {
+      auditName
+      auditDate
+      reason
+    }
+  }
+}

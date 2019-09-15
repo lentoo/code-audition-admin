@@ -24,6 +24,9 @@ Vue.mixin({
     }
   }
 })
+Vue.filter('dateFormat', value => {
+  return new Date(value).toLocaleString()
+})
 
 new Vue({
   router,

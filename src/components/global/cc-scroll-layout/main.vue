@@ -3,9 +3,10 @@
     <div class="cc-scroll-header">
       <slot name="header"></slot>
     </div>
-    <div class="cc-scroll-body"
+    <div
+      class="cc-scroll-body"
       :class="{
-        containerFixed: $slots.fixed ? true: false
+        containerFixed: $slots.fixed ? true : false
       }"
     >
       <slot></slot>
@@ -17,7 +18,13 @@
 </template>
 <script>
 export default {
-  name: 'cc-scroll-layout'
+  name: 'cc-scroll-layout',
+  mounted () {
+    const containerFixed = document.querySelector('.containerFixed')
+    console.log(document.documentElement.clientHeight - containerFixed.getBoundingClientRect().top - 40)
+    containerFixed.style.height = document.documentElement.clientHeight - containerFixed.getBoundingClientRect().top - 40 + 'px'
+  }
+
 }
 </script>
 <style lang="scss" scoped>
@@ -29,7 +36,7 @@ export default {
   }
   &-body {
     &.containerFixed {
-      height: 783px;
+      // height: 783px;
       padding-bottom: 35px;
     }
     height: calc(100vh - 110px);
@@ -37,11 +44,19 @@ export default {
     padding-right: 20px;
     overflow-y: auto;
     box-sizing: border-box;
-    &::-webkit-scrollbar {width: 8px;  background-color:transparent;} /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-    &::-webkit-scrollbar-track {background-color: #f0f6ff;  } /*定义滚动条轨道 内阴影+圆角*/
-    &::-webkit-scrollbar-thumb {background-color: #b0c0d0; border-radius:6px;} /*定义滑块 内阴影+圆角*/
+    &::-webkit-scrollbar {
+      width: 8px;
+      background-color: transparent;
+    } /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+    &::-webkit-scrollbar-track {
+      background-color: #f0f6ff;
+    } /*定义滚动条轨道 内阴影+圆角*/
+    &::-webkit-scrollbar-thumb {
+      background-color: #b0c0d0;
+      border-radius: 6px;
+    } /*定义滑块 内阴影+圆角*/
     &:hover {
-      &::-webkit-scrollbar{
+      &::-webkit-scrollbar {
         display: block;
       }
     }
