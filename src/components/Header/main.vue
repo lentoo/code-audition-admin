@@ -1,11 +1,23 @@
 <template>
   <header class="header">
     <div>
-      <cc-svg-icon class-name="menu-fold" icon-class="menu-fold" @click="handleMenuFold"></cc-svg-icon>
+      <cc-svg-icon
+        class-name="menu-fold"
+        icon-class="menu-fold"
+        @click="handleMenuFold"
+      ></cc-svg-icon>
     </div>
     <div>
-      <transition-group tag="el-breadcrumb" separator-class="el-icon-arrow-right" name="fade-move">
-        <el-breadcrumb-item v-for="item in getBreadcrumbItems" :key="item.path">{{item.name}}</el-breadcrumb-item>
+      <transition-group
+        tag="el-breadcrumb"
+        separator-class="el-icon-arrow-right"
+        name="fade-move"
+      >
+        <el-breadcrumb-item
+          v-for="item in getBreadcrumbItems"
+          :key="item.path"
+          >{{ item.name }}</el-breadcrumb-item
+        >
       </transition-group>
     </div>
 
@@ -16,9 +28,7 @@
           v-model="noticeVisible"
           popper-class="header-popper"
         >
-          <el-tabs
-            :stretch="true"
-            v-model="activeName">
+          <el-tabs :stretch="true" v-model="activeName">
             <el-tab-pane label="通知" name="notice">
               <notice-list></notice-list>
             </el-tab-pane>
@@ -29,28 +39,42 @@
               <notice-list></notice-list>
             </el-tab-pane>
           </el-tabs>
-          <div class="icon-item" :class="{
-            opened: noticeVisible
-          }" slot="reference">
+          <div
+            class="icon-item"
+            :class="{
+              opened: noticeVisible
+            }"
+            slot="reference"
+          >
             <el-badge :value="12">
-              <cc-svg-icon icon-class='notice'></cc-svg-icon>
+              <cc-svg-icon icon-class="notice"></cc-svg-icon>
             </el-badge>
           </div>
         </el-popover>
-          <el-dropdown @visible-change="dropdownVivibleHandle">
-            <div class="icon-item" :class="{
+        <el-dropdown
+          @command="handleCommand"
+          @visible-change="dropdownVivibleHandle"
+        >
+          <div
+            class="icon-item"
+            :class="{
               opened: dropdownVivible
-            }">
-              <cc-svg-icon class-name='icon-avatar' icon-class='avatar'></cc-svg-icon>
-              <span>Lentoo</span>
-            </div>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>个人中心</el-dropdown-item>
-              <el-dropdown-item>个人设置</el-dropdown-item>
-              <el-dropdown-item divided>退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-
+            }"
+          >
+            <cc-svg-icon
+              class-name="icon-avatar"
+              icon-class="avatar"
+            ></cc-svg-icon>
+            <span>{{ getUser.nickName }}</span>
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>个人中心</el-dropdown-item>
+            <el-dropdown-item>个人设置</el-dropdown-item>
+            <el-dropdown-item command="loginOut" divided
+              >退出登录</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </div>
   </header>
@@ -60,6 +84,7 @@ import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import { Breadcrumb, BreadcrumbItem, Badge } from 'element-ui'
 import NoticeList from '../notice-list'
+import { LoginOut } from '../../api/login'
 Vue.component(Breadcrumb.name, Breadcrumb)
 Vue.component(BreadcrumbItem.name, BreadcrumbItem)
 Vue.component(Badge.name, Badge)
@@ -91,10 +116,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getMenuCollapse', 'getBreadcrumbItems'])
+    ...mapGetters(['getMenuCollapse', 'getBreadcrumbItems', 'getUser'])
   },
   methods: {
     ...mapActions(['MENU_COLLAPSE']),
+    async handleCommand (key) {
+      if (key === 'loginOut') {
+        const { code } = await LoginOut()
+        if (code) {
+          localStorage.removeItem('token')
+          this.$router.replace('/login')
+        }
+      }
+    },
     handleMenuFold () {
       this.MENU_COLLAPSE(!this.getMenuCollapse)
     },
@@ -110,7 +144,7 @@ $headerHeight: 65px;
   height: $headerHeight;
   line-height: $headerHeight;
   padding: 0 35px;
-  box-shadow: 0px 0 7px rgba(72, 72, 72, .57);
+  box-shadow: 0px 0 7px rgba(72, 72, 72, 0.57);
   @include flex(row);
   justify-content: flex-start;
   align-items: center;
@@ -123,7 +157,7 @@ $headerHeight: 65px;
     float: right;
     height: 100%;
     overflow: hidden;
-    color: rgba(0, 0, 0, .65);
+    color: rgba(0, 0, 0, 0.65);
     @include flex(row);
     align-items: center;
     .icon-items {
@@ -137,7 +171,7 @@ $headerHeight: 65px;
         align-items: center;
         cursor: pointer;
         &.opened {
-          background: rgba(0,0,0,.025);
+          background: rgba(0, 0, 0, 0.025);
         }
       }
     }
@@ -149,15 +183,18 @@ $headerHeight: 65px;
     flex: 1;
     padding-left: 10px;
   }
-  .fade-move-enter-active,.fade-move-leave-active {
-    transition: .3s all ease;
+  .fade-move-enter-active,
+  .fade-move-leave-active {
+    transition: 0.3s all ease;
     // position: absolute
   }
-  .fade-move-enter,.fade-move-leave-to {
+  .fade-move-enter,
+  .fade-move-leave-to {
     opacity: 0;
     transform: translateX(-100px);
   }
-  .fade-move-enter-to,.fade-move-leave {
+  .fade-move-enter-to,
+  .fade-move-leave {
     opacity: 1;
     transform: translateX(0);
   }

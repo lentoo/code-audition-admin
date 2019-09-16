@@ -1,0 +1,6 @@
+mutation loginOut {
+  loginOut{
+    code
+    msg
+  }
+}

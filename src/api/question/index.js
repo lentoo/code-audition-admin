@@ -1,5 +1,3 @@
-import qs from 'qs'
-import axios from '../index'
 import client from '../../utils/graphql-client'
 import {
   addQuestion,
@@ -13,7 +11,8 @@ export const fetchQuestionList = (params, noCache = false) => {
   const query = {
     query: questions,
     variables: params,
-    fetchPolicy: noCache ? 'network-only' : null
+    // eslint-disable-next-line no-constant-condition
+    fetchPolicy: true ? 'network-only' : null
   }
   return client.query(query).then(({ data }) => data.fetchQuestionList)
 }

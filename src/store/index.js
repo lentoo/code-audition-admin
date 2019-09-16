@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { LocalStorage } from '../utils'
 Vue.use(Vuex)
 const requireContext = require.context('./modules', true, /\w+(.js)$/)
 let allModules = {}
@@ -11,14 +12,17 @@ requireContext.keys().map(file => {
     allModules[result[1]] = obj
   }
 })
-const types = {
+export const types = {
   MENU_COLLAPSE: 'MENU_COLLAPSE',
-  BREADCRUMB_ITEMS: 'BREADCRUMB_ITEMS'
+  BREADCRUMB_ITEMS: 'BREADCRUMB_ITEMS',
+  UPDATE_USER: 'UPDATE_USER'
 }
+const u = LocalStorage.getItem('u')
 export default new Vuex.Store({
   state: {
     [types.MENU_COLLAPSE]: false,
-    [types.BREADCRUMB_ITEMS]: []
+    [types.BREADCRUMB_ITEMS]: [],
+    user: u || {}
   },
   mutations: {
     [types.MENU_COLLAPSE]: (state, res) => {
@@ -26,6 +30,9 @@ export default new Vuex.Store({
     },
     [types.BREADCRUMB_ITEMS]: (state, res) => {
       state[types.BREADCRUMB_ITEMS] = res
+    },
+    [types.UPDATE_USER]: (state, res) => {
+      state.user = res
     }
   },
   actions: {
@@ -34,6 +41,9 @@ export default new Vuex.Store({
     },
     [types.BREADCRUMB_ITEMS]: async ({ commit }, state) => {
       return commit(types.BREADCRUMB_ITEMS, state)
+    },
+    [types.UPDATE_USER]: async ({ commit }, user) => {
+      return commit(types.UPDATE_USER, user)
     }
   },
   getters: {
@@ -42,6 +52,9 @@ export default new Vuex.Store({
     },
     getBreadcrumbItems (state) {
       return state[types.BREADCRUMB_ITEMS]
+    },
+    getUser (state) {
+      return state.user
     }
   },
   modules: {

@@ -49,13 +49,16 @@
 
 <script>
 import QRCode from 'qrcode'
-import { generatorClientId, LocalStorage } from '../../utils'
+import { mapActions } from 'vuex'
 import socketio from 'socket.io-client'
+import { generatorClientId, LocalStorage } from '../../utils'
+import { types } from '../../store'
 const unicode = generatorClientId()
 const wsUrl = process.env.VUE_APP_SOCKET_URL
 // const url = `${wsUrl}/backLoginHandler/unicode=${unicode}`
 
 const io = socketio(location.protocol + wsUrl)
+// const io = socketio('//localhost:7001/scanLogin')
 export default {
   name: 'cc-login',
 
@@ -87,6 +90,7 @@ export default {
     this.generateQrCode()
   },
   methods: {
+    ...mapActions([types.UPDATE_USER]),
     /**
      * @description 生成二维码
      */
@@ -122,13 +126,6 @@ export default {
       this.sendRefreshQrCode()
     },
     sendRefreshQrCode () {
-      // if (this.socket) {
-      //   this.socket.send(JSON.stringify({
-      //     // 101 表示刷新二维码
-      //     status: 101,
-      //     loginToken: this.loginToken
-      //   }))
-      // }
       if (io) {
         io.emit('beforeLogin', JSON.stringify({
           unicode: this.unicode,
@@ -146,15 +143,20 @@ export default {
     websocketOnMessage (e) {
       console.log('websocketOnMessage', e)
       try {
-        const data = JSON.parse(e)
-        switch (data.code) {
+        const { code, data } = e
+        const { ct, user, st } = JSON.parse(data)
+        switch (code) {
           case 1000:
             // 已被扫码
             this.isScanCodeSuccess = true
             break
           case 1:
             // 确认登录
-            LocalStorage.setItem('token', data.data)
+            LocalStorage.setItem('token', ct)
+            LocalStorage.setItem('st', st)
+            LocalStorage.setItem('u', user)
+            this.UPDATE_USER(user)
+            io.disconnect()
             this.$router.push('/category/index')
             break
           case 101:
