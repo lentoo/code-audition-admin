@@ -63,6 +63,9 @@
         <el-row slot="fixed">
           <el-col class="tc">
             <el-button class="mr20" @click="back">返回</el-button>
+            <el-button class="mr20" type="danger" @click="onClearForm"
+              >清空内容</el-button
+            >
             <el-button
               class="mr20"
               type="success"
@@ -133,6 +136,17 @@ export default {
         this.options = []
       }
     },
+    onClearForm () {
+      this.form = {
+        title: '',
+        categorys: '',
+        desc: '',
+        answer: {
+          markdown: '',
+          html: ''
+        }
+      }
+    },
     onSubmit () {
       this.$refs.form.validate(async valid => {
         if (valid) {
@@ -153,7 +167,8 @@ export default {
           if (res.code === 1) {
             this.$message.success('添加成功')
             delay(1000).then(() => {
-              this.$router.back()
+              this.onClearForm()
+              // this.$router.back()
             })
           }
         }

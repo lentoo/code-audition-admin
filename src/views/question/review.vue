@@ -334,7 +334,7 @@ export default {
       }, noCache)
       this.pagination.count = page.total
       this.list = Object.freeze(items.map(item => {
-        item.userName = item.userinfo.nickName
+        item.userName = item.userinfo && item.userinfo.nickName
         item.createAtDate = new Date(item.createAtDate).toLocaleString()
         item.selectable = item.auditStatus === 1000
         return item

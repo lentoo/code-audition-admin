@@ -18,11 +18,15 @@ import { uploadFile } from '../../api/index.js'
 Vue.use(mavonEditor)
 export default {
   name: '',
-
+  props: {
+    value: {
+      default: () => ({ markdown: '', html: '' })
+    }
+  },
   data () {
     return {
-      markdown: '',
-      html: '',
+      markdown: this.value.markdown,
+      html: this.value.html,
       toolbars: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -61,9 +65,12 @@ export default {
     }
   },
   watch: {
-    value () {
-      this.markdown = this.value.markdown
-      this.html = this.value.html
+    value: {
+      deep: true,
+      handler () {
+        this.markdown = this.value.markdown
+        this.html = this.value.html
+      }
     }
   },
   methods: {
