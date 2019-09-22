@@ -1,4 +1,4 @@
-## [0.1.3](https://github.com/lentoo/code-audition-admin/compare/0.1.1...0.1.3) (2019-09-16)
+## [0.1.4](https://github.com/lentoo/code-audition-admin/compare/0.1.1...0.1.4) (2019-09-22)
 
 
 ### Bug Fixes
@@ -8,6 +8,7 @@
 
 ### Features
 
+* 🎸 优化新增题目体验 ([063ff2d](https://github.com/lentoo/code-audition-admin/commit/063ff2d))
 * 🎸 新增权限控制，退出登陆 ([8f6ff38](https://github.com/lentoo/code-audition-admin/commit/8f6ff38))
 
 
