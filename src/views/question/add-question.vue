@@ -3,6 +3,15 @@
     <el-card>
       <cc-scroll-layout>
         <el-row>
+          <el-row type="flex" justify="end">
+            <el-col :span="4">
+              <el-form :inline="true" label-width="200px">
+                <el-form-item label="提交成功后清空分类？" prop="title">
+                  <el-switch v-model="clearSort"></el-switch>
+                </el-form-item>
+              </el-form>
+            </el-col>
+          </el-row>
           <el-col>
             <el-form
               label-position="top"
@@ -25,6 +34,7 @@
                       multiple
                       filterable
                       remote
+                      clearable
                       reserve-keyword
                       placeholder="请选择分类"
                       :multiple-limit="5"
@@ -96,9 +106,11 @@ export default {
   },
   data () {
     return {
+      clearSort: false,
+
       form: {
         title: '',
-        categorys: '',
+        categorys: [],
         desc: '',
         answer: ''
       },
@@ -123,29 +135,27 @@ export default {
       this.$router.back()
     },
     async remoteMethod (query) {
-      if (query !== '') {
-        this.loading = true
-        const { items } = await fetchSorts({
-          name: query
-        })
-        this.loading = false
-        const res = Object.assign(items)
-        console.log(res)
-        this.options = res.map(item => ({ value: item._id, label: item.sortName }))
-      } else {
-        this.options = []
-      }
+      // if (query !== '') {
+      this.loading = true
+      const { items } = await fetchSorts({
+        name: query
+      })
+      this.loading = false
+      const res = Object.assign(items)
+      console.log(res)
+      this.options = res.map(item => ({ value: item._id, label: item.sortName }))
     },
     onClearForm () {
       this.form = {
         title: '',
-        categorys: '',
+        categorys: this.clearSort ? [] : this.form.categorys,
         desc: '',
         answer: {
           markdown: '',
           html: ''
         }
       }
+      this.options = []
     },
     onSubmit () {
       this.$refs.form.validate(async valid => {

@@ -14,7 +14,7 @@
             v-if="column.type === 'selection'"
             type="selection"
             :reserve-selection="column.reserveSelection || false"
-            :selectable="(row, index) => row.selectable"
+            :selectable="(row, index) => row.selectable !== false"
             width="55"
           >
           </el-table-column>

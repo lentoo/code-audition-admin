@@ -5,7 +5,7 @@ import store from './store'
 import './components'
 import './assets/icons'
 import './lib/element-ui'
-import './assets/styles/reset.scss'
+// import './assets/styles/reset.scss'
 Vue.config.productionTip = false
 
 Vue.mixin({
@@ -25,7 +25,7 @@ Vue.mixin({
   }
 })
 Vue.filter('dateFormat', value => {
-  return new Date(value).toLocaleString()
+  return typeof value === 'number' ? new Date(value).toLocaleString() : value
 })
 
 new Vue({

@@ -4,7 +4,9 @@ export default {
       pagination: {
         page: 1,
         limit: 20,
-        count: 0
+        count: 0,
+        pages: 0,
+        hasMore: false
       },
       mixin_loading: true,
       mixin_loadingText: '正在加载中...'
@@ -50,6 +52,10 @@ export default {
       this.pagination.page = Number(page.current)
       this.pagination.count = Number(page.total)
       this.mixin_loading = false
+    },
+    $setPagination (pagination) {
+      Object.assign(this.pagination, pagination)
+      this.pagination.count = pagination.total
     }
   }
 }

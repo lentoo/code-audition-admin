@@ -1,5 +1,3 @@
-import qs from 'qs'
-import axios from '../index'
 import client from '../../utils/graphql-client'
 import { fetchSort, saveSort, removeSort } from './index.graphql'
 

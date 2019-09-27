@@ -1,0 +1,30 @@
+query fetchFeedback ($page: PaginationProp! , $name: String, $status: FeedbackStatus, $type: FeedbackType) {
+  fetchFeedback (page: $page, name: $name, status: $status, type: $type) {
+    page {
+      page
+      pages
+      hasMore
+      total
+    }
+    items {
+      _id
+      content
+      images
+      feedbackUser {
+        nickName
+        _id
+      }
+      status
+      type
+      createAtDate
+    }
+  }
+}
+
+mutation auditFeedback ($id: String!, $status: FeedbackStatus!, $resultContent: String!) {
+  auditFeedback (id: $id, status: $status, resultContent: $resultContent) {
+  	code
+    msg
+    data
+  }
+} 
