@@ -1,3 +1,12 @@
+## [0.1.5](https://github.com/lentoo/code-audition-admin/compare/0.1.4...0.1.5) (2019-09-27)
+
+
+### Features
+
+* 🎸 优化反馈功能 ([149dc64](https://github.com/lentoo/code-audition-admin/commit/149dc64))
+
+
+
 ## [0.1.4](https://github.com/lentoo/code-audition-admin/compare/0.1.1...0.1.4) (2019-09-22)
 
 
