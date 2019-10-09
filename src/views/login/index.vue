@@ -43,12 +43,14 @@
           </div>
         </el-card>
       </div>
+      <CanvasBg id="canvas"></CanvasBg>
     </div>
   </div>
 </template>
 
 <script>
 import QRCode from 'qrcode'
+import CanvasBg from './components/CanvasBg'
 import { mapActions } from 'vuex'
 import socketio from 'socket.io-client'
 import { generatorClientId, LocalStorage } from '../../utils'
@@ -61,7 +63,9 @@ const io = socketio(location.protocol + wsUrl)
 // const io = socketio('//localhost:7001/scanLogin')
 export default {
   name: 'cc-login',
-
+  components: {
+    CanvasBg
+  },
   data () {
     return {
       // socket: new WebSocket(url),
@@ -187,8 +191,8 @@ export default {
   }
   &-wrapper {
     height: 100vh;
-    background: url("../../assets/images/bg.jpg");
-    background-size: cover;
+    // background: url("../../assets/images/bg.jpg");
+    // background-size: cover;
   }
   &-form {
     width: 330px;
