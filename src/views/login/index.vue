@@ -144,13 +144,14 @@ export default {
       console.log('websocketOnMessage', e)
       try {
         const { code, data } = e
-        const { ct, user, st } = JSON.parse(data)
+
         switch (code) {
           case 1000:
             // 已被扫码
             this.isScanCodeSuccess = true
             break
           case 1:
+            const { ct, user, st } = JSON.parse(data)
             // 确认登录
             LocalStorage.setItem('token', ct)
             LocalStorage.setItem('st', st)
