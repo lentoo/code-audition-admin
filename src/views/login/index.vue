@@ -43,14 +43,23 @@
           </div>
         </el-card>
       </div>
-      <CanvasBg id="canvas"></CanvasBg>
+      <div class="bubble">
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+      </div>
+      <!-- <CanvasBg id="canvas"></CanvasBg> -->
     </div>
   </div>
 </template>
 
 <script>
 import QRCode from 'qrcode'
-import CanvasBg from './components/CanvasBg'
 import { mapActions } from 'vuex'
 import socketio from 'socket.io-client'
 import { generatorClientId, LocalStorage } from '../../utils'
@@ -63,9 +72,6 @@ const io = socketio(location.protocol + wsUrl)
 // const io = socketio('//localhost:7001/scanLogin')
 export default {
   name: 'cc-login',
-  components: {
-    CanvasBg
-  },
   data () {
     return {
       // socket: new WebSocket(url),
@@ -185,6 +191,9 @@ export default {
 
 <style lang="scss" scoped>
 .cc-login {
+  // body {
+  background: linear-gradient(to bottom right, #50a3a2 0%, #007fff 100%);
+  // }
   #login-can {
     width: 180px !important;
     height: 180px !important;
@@ -197,9 +206,9 @@ export default {
   &-form {
     width: 330px;
     position: absolute;
-    right: 250px;
+    left: 50%;
     top: 50%;
-    transform: translateY(-60%);
+    transform: translate(-50%, -50%);
   }
   .invalid {
     position: absolute;
@@ -236,6 +245,84 @@ export default {
       font-size: 18px;
       color: #999;
     }
+  }
+}
+.bubble {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100vh;
+
+  i {
+    position: absolute;
+    left: 5%;
+    bottom: -80px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    animation: square 20s linear infinite;
+
+    &:nth-child(1) {
+      width: 30px;
+      height: 30px;
+    }
+    &:nth-child(2) {
+      left: 19%;
+      width: 50px;
+      height: 50px;
+      animation-duration: 16s;
+      animation-delay: 1s;
+    }
+    &:nth-child(3) {
+      left: 27%;
+      width: 40px;
+      height: 40px;
+      animation-duration: 18s;
+    }
+    &:nth-child(4) {
+      left: 40%;
+      animation-duration: 15s;
+      animation-delay: 2s;
+    }
+    &:nth-child(5) {
+      left: 52%;
+      width: 60px;
+      height: 60px;
+      animation-duration: 19s;
+      animation-delay: 3s;
+    }
+    &:nth-child(6) {
+      left: 69%;
+      width: 50px;
+      height: 50px;
+      animation-duration: 18s;
+      animation-delay: 5s;
+    }
+    &:nth-child(7) {
+      left: 75%;
+      width: 40px;
+      height: 40px;
+      animation-duration: 15s;
+      animation-delay: 6s;
+    }
+    &:nth-child(8) {
+      left: 87%;
+      width: 30px;
+      height: 30px;
+      animation-duration: 14s;
+      animation-delay: 3.5s;
+    }
+  }
+}
+@keyframes square {
+  0% {
+    transform: translateY(0);
+  }
+  85%,
+  100% {
+    transform: translateY(-100vh) rotate(600deg);
   }
 }
 </style>
